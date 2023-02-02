@@ -1,20 +1,51 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
-      Blank
+      ToDo List
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="bg-img">
+    <h1>Aujourd'hui</h1>
+    <h5> {{ currentDate | date }}</h5>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <ion-card *ngFor="let task of allTasks">
+      <ion-item-sliding>
+        <ion-item>
+          <ion-checkbox (ionChange)="changeChecked(task)" [checked]="task.checked"></ion-checkbox>
+          <ion-label>
+            <h4 *ngIf="!task.checked">{{ task.text }} </h4>
+            <h4 *ngIf="task.checked" style="text-decoration : line-through">{{ task.text }} </h4>
+            <p> {{ task.date | date:'shortTime' }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item-options>
+          <ion-item-option (click)="presentAlert(task.id)" color="danger">Delete</ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-card>
+
+
+
+    <ion-card *ngIf="!showButton">
+      <ion-item>
+        <ion-input #inp type="text"></ion-input>
+        <ion-button (click)="addNewTask(inp.value)">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-button>
+
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-button *ngIf="showButton" expand="block" (click)="toggleButton()">Ajouter une tâche</ion-button>
+      <ion-button color="success" *ngIf="!showButton" expand="block" (click)="toggleButton()">Annuler</ion-button>
+    </ion-card>
+
   </div>
+
+
 </ion-content>
